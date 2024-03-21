@@ -91,9 +91,16 @@
         pop bc
     endmacro
     macro DSRestore
-        repeat \1
-            inc ix
-        endrepeat
+        if \1 > 3
+            push bc
+            ld bc, \1
+            add ix, bc
+            pop bc
+        else
+            repeat \1
+                inc ix
+            endrepeat
+        endif
     endmacro
     macro DSPeek
         ld \1, (ix+\2)
@@ -243,11 +250,15 @@
 
 ;-----------------------------------------------
 ;IO
-    macro print
-        DSPushNN \1
-        call stdio.puts
+    macro printConst
+        DSPushNN .Text\@
+        call Serial1.puts
         DSRestore 2
-    endmacro
+        jp .Text\@end
+        .Text\@:
+            string \1
+        .Text\@end:
+    endm
     macro printNL
         DSPushN 10 ;\n does not get escaped corretly... for some reason *shrug*
         call stdio.putc

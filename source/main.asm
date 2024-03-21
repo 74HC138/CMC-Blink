@@ -39,7 +39,7 @@ Bootstrap:
         out (ROM_BA), a
         ld sp, StackEnd
         ld ix, DataStackEnd
-        ld a, >(BASE & 0xff00)
+        ld a, (>(BASE & 0xff00)) + 1
         ld i, a
         im 2
         call Setup
@@ -53,20 +53,14 @@ Setup:
         call Serial1.init
         DSRestore 1
 
-        DSPushNN .greeting
-        call Serial1.puts
-        DSRestore 2
+        printConst "Greeting from a macro\n"
 
         call Clock.Init
+
         ret
-    
-    .greeting:
-        string "Blink example\n"
 
 Loop:
-        DSPushNN .loopText
-        call Serial1.puts
-        DSRestore 2
+        printConst "Loop\n"
 
         ld a, 0x00
         out (DAC_0), a
@@ -87,9 +81,6 @@ Loop:
         DSRestore 2
 
         ret
-
-    .loopText:
-        string "Loopdiloop\n"
 
 ;-----------------------------------------------}
 ;Post program include

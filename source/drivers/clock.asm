@@ -54,12 +54,13 @@ Clock.Sleep:
 
 ;interrupt handler
 Clock.Interrupt:
-    defc InterruptVec2 = Clock.Interrupt
+    defc InterruptVec02 = Clock.Interrupt
         ex AF, AF'
         exx
 
-        ld hl, Clock.systick
-        inc (hl)
+        ld hl, (Clock.systick)
+        inc hl
+        ld (Clock.systick), hl
 
         exx
         ex AF, AF'
