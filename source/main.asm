@@ -67,18 +67,15 @@ Loop:
         ld a, 0xff
         out (DAC_1), a
 
-        DSPushNN 50
-        call Clock.Sleep
-        DSRestore 2
+        Sleep 50
 
         ld a, 0xff
         out (DAC_0), a
         ld a, 0x00
         out (DAC_1), a
 
-        DSPushNN 50
-        call Clock.Sleep
-        DSRestore 2
+        Sleep 50
+
 
         ret
 

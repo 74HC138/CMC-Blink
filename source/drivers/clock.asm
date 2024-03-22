@@ -1,13 +1,22 @@
-
 ;-----------------------------------------------{
+;Variables
     dsect
 Clock:
     .systick:
         dc 2
     dend
 ;-----------------------------------------------}
-
 ;-----------------------------------------------{
+;Macros
+    macro Sleep
+        DSPushNN \1
+        call Clock.SleepFn
+        DSRestore 2
+    endmacro
+
+;-----------------------------------------------}
+;-----------------------------------------------{
+;Functions
 Clock.Init:
         ld a, 0x00 ;interrupt vector 0
         out (CTC_CH0), a
@@ -42,7 +51,7 @@ Clock.Set:
 
 ;sleeps for n deciseconds
 ;expects timeout on DS
-Clock.Sleep:
+Clock.SleepFn:
         DSPeekHL 0
         ld bc, (Clock.systick)
         add hl, bc
